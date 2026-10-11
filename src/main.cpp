@@ -1,10 +1,9 @@
 #include "raylib.h"
 #include <vector>
 #include <string>
+#include <math.h>
 
 int main() {
-    InitWindow(800, 600, "Dungeon");
-    SetTargetFPS(60);
     
     float speed = 200;
 
@@ -27,9 +26,8 @@ int main() {
         "#..................#",
         "####################"
     };
-    std::vector<Rectangle> walls = {
 
-    };
+    std::vector<Rectangle> walls = { };
 
     for (int row = 0; row < level.size(); row++) {
         for (int col = 0; col < level[row].size(); col++) {
@@ -38,9 +36,14 @@ int main() {
             }
         }
     }
-
-    Rectangle player = { 44, 44, 32, 32 };
     
+    Rectangle player = { 44, 44, 32, 32 };
+
+    const int ROWS = level.size();
+    const int COLS = level[0].size();
+
+    InitWindow(COLS * TILE, ROWS * TILE, "Dungeon");
+    SetTargetFPS(60);
     while (!WindowShouldClose()) {
         Rectangle old_player = player;
         if (IsKeyDown(KEY_RIGHT)) player.x += speed * GetFrameTime();
