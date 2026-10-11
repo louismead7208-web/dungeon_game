@@ -2,6 +2,11 @@
 #include <vector>
 #include <string>
 #include <math.h>
+#include <ctime>
+
+// prototypes
+std::vector<std::string> generate_level(int ROWS, int COLS);
+
 
 int main() {
     
@@ -9,23 +14,7 @@ int main() {
 
     const float TILE = 40;
 
-    std::vector<std::string> level = {
-        "####################",
-        "#..................#",
-        "#.####.......####..#",
-        "#.#..............#.#",
-        "#.#..............#.#",
-        "#.####.......####..#",
-        "#..................#",
-        "#......##########..#",
-        "#..................#",
-        "#.###..............#",
-        "#.#................#",
-        "#.#....#####.......#",
-        "#......#...........#",
-        "#..................#",
-        "####################"
-    };
+    std::vector<std::string> level = generate_level(15, 20);
 
     std::vector<Rectangle> walls = { };
 
@@ -73,3 +62,66 @@ int main() {
     CloseWindow();
     return 0;
 }
+
+std::vector<std::string> generate_level(int ROWS, int COLS) {
+    std::vector<std::string> level(ROWS, std::string(COLS, '#'));
+    //SetRandomSeed(1);
+    SetRandomSeed((unsigned int)time(NULL));
+    int walker_x = GetRandomValue(1, COLS - 2);
+    int walker_y = GetRandomValue(1, ROWS - 2);
+    for (int i = 0; i < 500; i++) {
+        level[walker_y][walker_x] = '.';
+
+        int direction = GetRandomValue(0, 3); //0:down, 1:up, 2:right, 3:left
+        if (direction == 0) {
+            if (walker_y + 1 == ROWS - 2) {
+                continue;
+            }
+            walker_y++;
+        } 
+        else if (direction == 1) {
+            if (walker_y - 1 == 1) {
+                continue;
+            }
+            walker_y--;
+        } 
+        else if (direction == 2) {
+            if (walker_x + 1 == COLS - 2) {
+                continue;
+            }
+            walker_x++;
+        }
+        else if (direction == 3) {
+            if (walker_x - 1 == 1) {
+                continue;
+            }
+            walker_x--;
+        }
+    }
+    return level;
+}
+
+/*
+std::vector<std::string> level = {
+        "####################",
+        "#..................#",
+        "#.####.......####..#",
+        "#.#..............#.#",
+        "#.#..............#.#",
+        "#.####.......####..#",
+        "#..................#",
+        "#......##########..#",
+        "#..................#",
+        "#.###..............#",
+        "#.#................#",
+        "#.#....#####.......#",
+        "#......#...........#",
+        "#..................#",
+        "####################"
+    };
+for (int row = 0; row < ROWS; row++) {
+    for (int col = 0; col < COLS; col++) {
+        level[row][col] = '#';
+    }
+}
+*/
