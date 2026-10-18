@@ -8,5 +8,5 @@ FetchContent_Declare(raylib
     GIT_TAG 5.5)
 FetchContent_MakeAvailable(raylib)
 
-add_executable(game src/main.cpp)
+add_executable(game src/main.cpp "src/p_gen.cpp"  "src/p_gen.h")
 target_link_libraries(game raylib)

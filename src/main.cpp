@@ -3,9 +3,10 @@
 #include <string>
 #include <math.h>
 #include <ctime>
+#include "p_gen.h"
 
 // prototypes
-std::vector<std::string> generate_level(int ROWS, int COLS);
+//std::vector<std::string> generate_level(int ROWS, int COLS, int walks);
 
 
 int main() {
@@ -14,24 +15,31 @@ int main() {
 
     const float TILE = 40;
 
-    std::vector<std::string> level = generate_level(15, 20);
+    //std::vector<std::string> level = generate_level(15, 20, 500);
 
     std::vector<Rectangle> walls = { };
 
-    for (int row = 0; row < level.size(); row++) {
-        for (int col = 0; col < level[row].size(); col++) {
-            if (level[row][col] == '#') {
-                walls.push_back({TILE * col, TILE * row, TILE, TILE});
+    gen_map();
+
+    for (int h = 0; h < MAP_HEIGHT; h++) {
+        for (int w = 0; w < MAP_WIDTH; w++) {
+            if (map[h][w] == DEAD) {
+                walls.push_back({TILE * w, TILE * h, TILE, TILE});
+            }
+            if (h == 0 || h == MAP_HEIGHT - 1 || w == 0 || w == MAP_WIDTH - 1) {
+                walls.push_back({ TILE * w, TILE * h, TILE, TILE });
             }
         }
     }
+
+
     
     Rectangle player = { 44, 44, 32, 32 };
 
-    const int ROWS = level.size();
-    const int COLS = level[0].size();
+    //const int ROWS = level.size();
+    //const int COLS = level[0].size();
 
-    InitWindow(COLS * TILE, ROWS * TILE, "Dungeon");
+    InitWindow(MAP_WIDTH * TILE, MAP_HEIGHT * TILE, "Dungeon");
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         Rectangle old_player = player;
@@ -63,13 +71,14 @@ int main() {
     return 0;
 }
 
-std::vector<std::string> generate_level(int ROWS, int COLS) {
+/*  
+std::vector<std::string> generate_level(int ROWS, int COLS, int walks) {
     std::vector<std::string> level(ROWS, std::string(COLS, '#'));
     //SetRandomSeed(1);
     SetRandomSeed((unsigned int)time(NULL));
     int walker_x = GetRandomValue(1, COLS - 2);
     int walker_y = GetRandomValue(1, ROWS - 2);
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < walks; i++) {
         level[walker_y][walker_x] = '.';
 
         int direction = GetRandomValue(0, 3); //0:down, 1:up, 2:right, 3:left
@@ -100,6 +109,7 @@ std::vector<std::string> generate_level(int ROWS, int COLS) {
     }
     return level;
 }
+*/
 
 /*
 std::vector<std::string> level = {
