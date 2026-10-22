@@ -101,20 +101,23 @@ void pocket_remover() {
                 }
             }
 
-            int index = rand() % region.size();
-            region_coords[region_counter] = region[index];
+            if (region.size() >= static_cast<std::size_t>(min_pocket_size)) {
+                int index = rand() % region.size();
+                region_coords[region_counter] = region[index];
+                region_counter++;
+            }
         }
     }
 }
 
 void tunnel_carver() {
-    for (int i = 0; i < region_counter; i++) {
+    for (int i = 0; i < region_counter - 1; i++) {
         int h = region_coords[i].first;
         int w = region_coords[i].second;
         int diff_h = region_coords[i + 1].first - h;
         int diff_w = region_coords[i + 1].second - w;
 
-        while (diff_h != 0 && diff_w != 0) {
+        while (diff_h != 0 || diff_w != 0) {
             bool move_vert;
 
             if (diff_w == 0) move_vert = true;
@@ -165,4 +168,5 @@ void gen_map() {
 
     // Remove small disconnected walkable regions after cave generation.
     pocket_remover();
+    tunnel_carver();
 }
